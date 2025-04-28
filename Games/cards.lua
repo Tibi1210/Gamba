@@ -1,5 +1,6 @@
 local Game_handler = {}
 
+
     Game_handler.hand = {}
     local prev_time = 0
     local grab_num = 0
@@ -8,16 +9,16 @@ local Game_handler = {}
     function Game_handler.load()
         -- local currentDeck = Deck.New(1)
         -- hand["cards"] = Deck.Draw(currentDeck,10, "top")
-        Game_handler.hand["cards"] = Deck.New(1)
+        Game_handler.hand["cards"] = Deck.New(5)
 
-        local temp = {0,-100}
+        --local temp = {0,-100}
         for i = 1, #Game_handler.hand["cards"] do
             if i%10==1 then
-                temp[1] = 0
-                temp[2] = temp[2]+100
+                --temp[1] = 0
+                --temp[2] = temp[2]+100
             end
-            Game_handler.hand["cards"][i][4] = {temp[1], temp[2]}
-            temp[1]=temp[1]+120
+            Game_handler.hand["cards"][i][4] = {0, 0}
+            --temp[1]=temp[1]+120
         end
 
     end
@@ -90,16 +91,6 @@ local Game_handler = {}
                 Game_handler.hand["cards"][i][5] = false
             end
             grab_num = 0
-        end
-    end
-
-    function Game_handler.keypressed(key)
-        if key == 'escape' then
-            love.event.quit()
-        end
-
-        if key == 'r' then
-            love.event.quit("restart")
         end
     end
 
