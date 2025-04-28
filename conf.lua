@@ -1,6 +1,7 @@
 _G.love = require("love")
 Shader = require("shader_handler")
 Deck = require("Deck")
+Cards = require("Games.cards")
 
 
 math.randomseed(os.time())
