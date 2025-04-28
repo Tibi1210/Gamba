@@ -1,7 +1,6 @@
 local time = 0
 local is_fullscreen = true
 local hand = {}
-local card_size = {100,140}
 local prev_time = 0
 local canvas = love.graphics.newCanvas(SW, SH)
 local r, g, b = love.math.colorFromBytes(34, 115, 56,1)
@@ -35,8 +34,8 @@ function love.update(dt)
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
         for i = 1, #hand["cards"] do
-            if hand["cards"][i][5] and x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] then
-                hand["cards"][i][4] = {x - card_size[1]/2, y - card_size[2]/2}
+            if hand["cards"][i][5] and x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+CardSize[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+CardSize[2] then
+                hand["cards"][i][4] = {x - CardSize[1]/2, y - CardSize[2]/2}
             end
         end
     end
@@ -58,11 +57,12 @@ function love.update(dt)
         love.graphics.setColor(1,1,1,1)
         Shader.New("Shaders/Card.glsl")
         love.graphics.setShader(Shader.Get())
-        Shader.SetVector2("_Size", card_size)
+        Shader.SetVector2("_Size", CardSize)
         for i = #hand["cards"], 1, -1  do
             Shader.SetTexture2D("_Card", hand["cards"][i][3], "clampzero", "nearest")
             Shader.SetVector2("_CardPos", hand["cards"][i][4])
-            love.graphics.rectangle("fill", hand["cards"][i][4][1], hand["cards"][i][4][2], card_size[1], card_size[2])
+            Shader.SetBoolean("_IsGrabbed", hand["cards"][i][5])
+            love.graphics.rectangle("fill", hand["cards"][i][4][1], hand["cards"][i][4][2], CardSize[1], CardSize[2])
         end
         love.graphics.setShader()
     love.graphics.setCanvas()
@@ -71,12 +71,14 @@ end
 
 function love.draw()
     love.graphics.draw(canvas, 0,0)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 12)
 end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
         for i = 1, #hand["cards"] do
-            if x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] then
+            if x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+CardSize[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+CardSize[2] then
                 hand["cards"][i][5] = true
 
                 table.insert(hand["cards"], 1+grab_num, table.remove(hand["cards"], i))

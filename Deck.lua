@@ -23,19 +23,6 @@ function Deck.New(size)
     return temp
 end
 
-function Deck.Merge(this, other)
-    local temp = {}
-
-    for _, value in pairs(this) do
-        table.insert(temp, {value[1], value[2]})
-    end
-    for _, value in pairs(other) do
-        table.insert(temp, {value[1], value[2]})
-    end
-    temp = Deck.Shuffle(temp)
-    return temp
-end
-
 function Deck.Fold(from, to)
     for i = 1, Deck.Size(from) do
         table.insert(to, table.remove(from, 1))
@@ -49,12 +36,6 @@ function Deck.Shuffle(deck)
         table.insert(temp, table.remove(deck, math.random(Deck.Size(deck))))
     end
     return temp
-end
-
-function Deck.Print(deck)
-    for index, card in pairs(deck) do
-        print(index..": "..card[1].." "..card[2].." "..card[4][1].." "..card[4][2])
-    end
 end
 
 function Deck.Size(deck)

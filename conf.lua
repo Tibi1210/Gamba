@@ -1,14 +1,14 @@
 _G.love = require("love")
 Shader = require("shader_handler")
-
 Deck = require("Deck")
+
 
 math.randomseed(os.time())
 
 SW = 1200
 SH = 675
 
-Shader_files = {}
+CardSize = {110,150}
 
 function love.conf(t)
     t.window.title = "Gamba"
