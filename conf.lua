@@ -1,0 +1,24 @@
+_G.love = require("love")
+Shader = require("shader_handler")
+
+Deck = require("Deck")
+
+math.randomseed(os.time())
+
+SW = 1200
+SH = 675
+
+Shader_files = {}
+
+function love.conf(t)
+    t.window.title = "Gamba"
+    t.window.height = SH
+    t.window.width = SW
+    t.window.resizable = false
+    t.console = false
+    t.window.borderless = false
+    t.window.fullscreen = false
+    t.window.fullscreentype = "desktop"
+    t.window.vsync = 0
+    t.window.msaa = 0
+end
