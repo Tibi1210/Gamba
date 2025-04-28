@@ -14,8 +14,8 @@ function love.load()
     os.execute("cls")
     local currentDeck = Deck.New(1)
 
-    hand["cards"] = Deck.Draw(currentDeck,3, "top")
-    -- hand["cards"] = Deck.New(1)
+    --hand["cards"] = Deck.Draw(currentDeck,10, "top")
+    hand["cards"] = Deck.New(1)
 
     local temp = {0,-100}
     for i = 1, #hand["cards"] do
@@ -42,9 +42,10 @@ function love.update(dt)
     end
     if love.mouse.isDown(2) and time-prev_time>0.1 then
         prev_time = time
-        for i = 1, #hand["cards"] do
+        for i = #hand["cards"], 1, -1 do
             if hand["cards"][i][5] then
                 hand["cards"][i][5] = false
+                grab_num = grab_num - 1
                 break
             end
         end
@@ -58,7 +59,7 @@ function love.update(dt)
         Shader.New("Shaders/Card.glsl")
         love.graphics.setShader(Shader.Get())
         Shader.SetVector2("_Size", card_size)
-        for i = 1, #hand["cards"] do
+        for i = #hand["cards"], 1, -1  do
             Shader.SetTexture2D("_Card", hand["cards"][i][3], "clampzero", "nearest")
             Shader.SetVector2("_CardPos", hand["cards"][i][4])
             love.graphics.rectangle("fill", hand["cards"][i][4][1], hand["cards"][i][4][2], card_size[1], card_size[2])
@@ -77,11 +78,11 @@ function love.mousepressed(x, y, button)
         for i = 1, #hand["cards"] do
             if x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] then
                 hand["cards"][i][5] = true
+
+                table.insert(hand["cards"], 1+grab_num, table.remove(hand["cards"], i))
                 grab_num = grab_num + 1
             end
         end
-
-
     end
 
  end
@@ -90,8 +91,8 @@ function love.mousepressed(x, y, button)
     if button == 1 then
         for i = 1, #hand["cards"] do
             hand["cards"][i][5] = false
-            grab_num = 0
         end
+        grab_num = 0
     end
  end
 
