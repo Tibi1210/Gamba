@@ -2,28 +2,29 @@ local time = 0
 local is_fullscreen = true
 local hand = {}
 local card_size = {100,140}
-local grab = false
-
+local prev_time = 0
 local canvas = love.graphics.newCanvas(SW, SH)
 local r, g, b = love.math.colorFromBytes(34, 115, 56,1)
 love.graphics.setBackgroundColor(255, 0, 0)
+local grab_num = 0
 
 function love.load()
     time = 0
 
     os.execute("cls")
     local currentDeck = Deck.New(1)
-    Deck.Print(currentDeck)
-    print()
-    
-    print("HAND")
-    hand["cards"] = Deck.Draw(currentDeck,5, "top")
-    Deck.Print(hand["cards"])
 
-    local temp = 0
+    hand["cards"] = Deck.Draw(currentDeck,3, "top")
+    -- hand["cards"] = Deck.New(1)
+
+    local temp = {0,-100}
     for i = 1, #hand["cards"] do
-        hand["cards"][i][4] = {temp, 0}
-        temp=temp+120
+        if i%10==1 then
+            temp[1] = 0
+            temp[2] = temp[2]+100
+        end
+        hand["cards"][i][4] = {temp[1], temp[2]}
+        temp[1]=temp[1]+120
     end
 
 end
@@ -34,11 +35,17 @@ function love.update(dt)
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
         for i = 1, #hand["cards"] do
-            if x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] and not grab then
+            if hand["cards"][i][5] and x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] then
                 hand["cards"][i][4] = {x - card_size[1]/2, y - card_size[2]/2}
-                grab = true
-            else
-                grab = false
+            end
+        end
+    end
+    if love.mouse.isDown(2) and time-prev_time>0.1 then
+        prev_time = time
+        for i = 1, #hand["cards"] do
+            if hand["cards"][i][5] then
+                hand["cards"][i][5] = false
+                break
             end
         end
     end
@@ -52,7 +59,7 @@ function love.update(dt)
         love.graphics.setShader(Shader.Get())
         Shader.SetVector2("_Size", card_size)
         for i = 1, #hand["cards"] do
-            Shader.SetTexture2D("_Card", hand["cards"][i][3], "clamp", "nearest")
+            Shader.SetTexture2D("_Card", hand["cards"][i][3], "clampzero", "nearest")
             Shader.SetVector2("_CardPos", hand["cards"][i][4])
             love.graphics.rectangle("fill", hand["cards"][i][4][1], hand["cards"][i][4][2], card_size[1], card_size[2])
         end
@@ -65,11 +72,26 @@ function love.draw()
     love.graphics.draw(canvas, 0,0)
 end
 
-function love.mousepressed(x, y, button, istouch)
-    if button == 2 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
-       print(x)
-       print(y)
+function love.mousepressed(x, y, button)
+    if button == 1 then
+        for i = 1, #hand["cards"] do
+            if x>hand["cards"][i][4][1] and x<hand["cards"][i][4][1]+card_size[1] and y>hand["cards"][i][4][2] and y<hand["cards"][i][4][2]+card_size[2] then
+                hand["cards"][i][5] = true
+                grab_num = grab_num + 1
+            end
+        end
 
+
+    end
+
+ end
+
+ function love.mousereleased(x, y, button)
+    if button == 1 then
+        for i = 1, #hand["cards"] do
+            hand["cards"][i][5] = false
+            grab_num = 0
+        end
     end
  end
 

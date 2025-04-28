@@ -16,7 +16,7 @@ function Deck.New(size)
     for _ = 1, size do
             for key, value in pairs(cards) do
                 --print(key..": "..value)
-                table.insert(temp, {key, value, love.graphics.newImage("Assets/Cards/"..key..".png"), {0, 0}, love.graphics.newShader("Shaders/Card.glsl")})
+                table.insert(temp, {key, value, love.graphics.newImage("Assets/Cards/"..key..".png"), {0, 0}, false})
             end
     end
     temp = Deck.Shuffle(temp)
