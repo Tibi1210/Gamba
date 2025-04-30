@@ -1,36 +1,36 @@
-local shader_handler = {}
+local module = {}
 
 local shader_instance = nil
 
-function shader_handler.New(path)
+function module.New(path)
     shader_instance = love.graphics.newShader(path)
 end
 
-function shader_handler.Get()
+function module.Get()
     if shader_instance then
         return shader_instance
     end
 end
 
-function shader_handler.SetFloat(uniform, value)
+function module.SetFloat(uniform, value)
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
         shader_instance:send(uniform, value)
     end
 end
 
-function shader_handler.SetInteger(uniform, value)
+function module.SetInteger(uniform, value)
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
         shader_instance:send(uniform, math.floor(value))
     end
 end
 
-function shader_handler.SetBoolean(uniform, value)
+function module.SetBoolean(uniform, value)
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
         shader_instance:send(uniform, value)
     end
 end
 
-function shader_handler.SetVector2(uniform, vec2)
+function module.SetVector2(uniform, vec2)
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
         if #vec2 == 2 then
             shader_instance:send(uniform, vec2)
@@ -40,7 +40,7 @@ function shader_handler.SetVector2(uniform, vec2)
     end
 end
 
-function shader_handler.SetVector4(uniform, vec4)
+function module.SetVector4(uniform, vec4)
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
         if #vec4 == 4 then
             shader_instance:send(uniform, vec4)
@@ -50,7 +50,7 @@ function shader_handler.SetVector4(uniform, vec4)
     end
 end
 
-function shader_handler.SetTexture2D(uniform, image, wrap, filter)
+function module.SetTexture2D(uniform, image, wrap, filter)
     wrap = wrap or 'repeat'
     filter = filter or 'linear'
     if shader_instance ~= nil and shader_instance:hasUniform(uniform) then
@@ -60,4 +60,4 @@ function shader_handler.SetTexture2D(uniform, image, wrap, filter)
     end
 end
 
-return shader_handler
+return module

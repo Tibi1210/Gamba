@@ -1,4 +1,4 @@
-local Deck = {}
+local module = {}
 
 
 local cards = {}
@@ -11,7 +11,7 @@ for _, face in pairs({'J', 'Q', 'K', 'A'}) do
 end
 end
 
-function Deck.New(size)
+function module.New(size)
     local temp = {}
     for _ = 1, size do
             for key, value in pairs(cards) do
@@ -19,26 +19,26 @@ function Deck.New(size)
                 table.insert(temp, {key, value, love.graphics.newImage("Assets/Cards/"..key..".png"), {0, 0}, false})
             end
     end
-    temp = Deck.Shuffle(temp)
+    temp = module.Shuffle(temp)
     return temp
 end
 
-function Deck.Fold(from, to)
-    for i = 1, Deck.Size(from) do
+function module.Fold(from, to)
+    for i = 1, module.Size(from) do
         table.insert(to, table.remove(from, 1))
     end
 end
 
-function Deck.Shuffle(deck)
+function module.Shuffle(deck)
     math.randomseed(os.time())
     local temp = {}
-    for i = 1, Deck.Size(deck) do
-        table.insert(temp, table.remove(deck, math.random(Deck.Size(deck))))
+    for i = 1, module.Size(deck) do
+        table.insert(temp, table.remove(deck, math.random(module.Size(deck))))
     end
     return temp
 end
 
-function Deck.Size(deck)
+function module.Size(deck)
     local temp = 0
     for _, _ in pairs(deck) do
         temp = temp + 1
@@ -46,11 +46,11 @@ function Deck.Size(deck)
     return temp
 end
 
-function Deck.Draw(from, num, where)
+function module.Draw(from, num, where)
     math.randomseed(os.time())
     where = where or 'random'
     local hand = {}
-    local size = Deck.Size(from)
+    local size = module.Size(from)
     if num < size then
         for i = 1, num do
             if where == "top" then
@@ -69,4 +69,4 @@ function Deck.Draw(from, num, where)
 end
 
 
-return Deck
+return module
