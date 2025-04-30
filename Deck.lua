@@ -30,7 +30,6 @@ function module.Fold(from, to)
 end
 
 function module.Shuffle(deck)
-    math.randomseed(os.time())
     local temp = {}
     for i = 1, module.Size(deck) do
         table.insert(temp, table.remove(deck, math.random(module.Size(deck))))
@@ -47,7 +46,6 @@ function module.Size(deck)
 end
 
 function module.Draw(from, num, where)
-    math.randomseed(os.time())
     where = where or 'random'
     local hand = {}
     local size = module.Size(from)

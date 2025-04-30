@@ -7,21 +7,20 @@ local menu = {}
     local case_btn = {1200/2-75, 675/2-37.5+100, 150, 75}
 
     function menu.load()
-        print(menu.start)
         if menu.start == 1 then
-            Cards.canvas = love.graphics.newCanvas(1200, 675)
-            Cards.load()
+            Card_game.canvas = love.graphics.newCanvas(1200, 675)
+            Card_game.load()
         elseif menu.start == 2 then
-            Case.canvas = love.graphics.newCanvas(1200, 675)
-            Case.load()
+            Case_game.canvas = love.graphics.newCanvas(1200, 675)
+            Case_game.load()
         end
     end
 
     function menu.update(time)
         if menu.start == 1 then
-            Cards.update(time)
+            Card_game.update(time)
         elseif menu.start == 2 then
-            Case.update(time)
+            Case_game.update(time)
         else
             love.graphics.setCanvas(menu.canvas)
             Shader.New("Shaders/noise_art_fbm.glsl")
@@ -41,9 +40,9 @@ local menu = {}
 
     function menu.draw()
         if menu.start == 1 then
-            Cards.draw()
+            Card_game.draw()
         elseif menu.start == 2 then
-            Case.draw()
+            Case_game.draw()
         else
             love.graphics.draw(menu.canvas, 0,0)
             love.graphics.setColor(0,0,0,1)
@@ -55,9 +54,9 @@ local menu = {}
     function menu.mousepressed(x, y, button)
         if button == 1 then
             if menu.start == 1 then
-                Cards.mousepressed(x, y, button)
+                Card_game.mousepressed(x, y, button)
             elseif menu.start == 2 then
-                Case.mousepressed(x, y, button)
+                Case_game.mousepressed(x, y, button)
             else
                 if x>card_btn[1] and x<card_btn[1]+card_btn[3] and y>card_btn[2] and y<card_btn[2]+card_btn[4] then
                     menu.start = 1
@@ -73,9 +72,9 @@ local menu = {}
 
     function menu.mousereleased(x, y, button)
         if menu.start == 1 then
-            Cards.mousereleased(x, y, button)
+            Card_game.mousereleased(x, y, button)
         elseif menu.start == 2 then
-            Case.mousereleased(x, y, button)
+            Case_game.mousereleased(x, y, button)
         end
     end
 

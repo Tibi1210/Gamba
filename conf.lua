@@ -1,10 +1,11 @@
 _G.love = require("love")
 Shader = require("shader_handler")
 Deck = require("Deck")
-Background_handler = require("background")
+Case = require("Case")
+Support_functions = require("background")
 
-Cards = require("Games.cards")
-Case = require("Games.case")
+Card_game = require("Games.cards")
+Case_game = require("Games.caseopening")
 
 MainMenu = require("Games.MainMenu")
 

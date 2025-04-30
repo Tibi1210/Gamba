@@ -44,10 +44,10 @@ local Game_handler = {}
             end
         end
 
-        love.graphics.setCanvas(Cards.canvas)
+        love.graphics.setCanvas(Card_game.canvas)
 
 
-        Background_handler.setBackground(34,115,56)
+        Support_functions.setBackground(34,115,56)
         Shader.New("Shaders/Card.glsl")
         love.graphics.setShader(Shader.Get())
         Shader.SetVector2("_Size", CardSize)
