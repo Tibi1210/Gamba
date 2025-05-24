@@ -3,6 +3,7 @@ Shader = require("shader_handler")
 Deck = require("Entities.Deck")
 Case = require("Entities.Case")
 Support_functions = require("background")
+UI_btn = require("UI_btn")
 
 Card_game = require("Games.cards")
 Case_game = require("Games.caseopening")

@@ -3,8 +3,9 @@ local menu = {}
 
     menu.start = 0
     menu.canvas = nil
-    local card_btn = {1200/2-75, 675/2-37.5, 150, 75}
-    local case_btn = {1200/2-75, 675/2-37.5+100, 150, 75}
+    local card_btn = UI_btn.New(1200/2-75, 675/2-37.5,     175, 75, "card")
+    local case_btn = UI_btn.New(1200/2-75, 675/2-37.5+100, 175, 75, "case")
+
 
     function menu.load()
         if menu.start == 1 then
@@ -23,16 +24,10 @@ local menu = {}
             Case_game.update(time)
         else
             love.graphics.setCanvas(menu.canvas)
-            Shader.New("Shaders/noise_art_fbm.glsl")
-            love.graphics.setShader(Shader.Get())
-            Shader.SetFloat("_Time", time)
-            Shader.SetVector2("_ScreenSize", { love.graphics.getWidth(), love.graphics.getHeight() })
-            love.graphics.rectangle("fill", 0, 0, SW, SH)
-            love.graphics.setShader()
-            love.graphics.setColor(34/255, 45/255, 115/255,1)
-            love.graphics.rectangle("fill", card_btn[1], card_btn[2], card_btn[3], card_btn[4])
-            love.graphics.setColor(115/255, 80/255, 34/255,1)
-            love.graphics.rectangle("fill", case_btn[1], case_btn[2], case_btn[3], case_btn[4])
+            Support_functions.setBackground(148, 150, 33)
+            local m_x, m_y = love.mouse.getPosition()
+            card_btn.Show({m_x, m_y})
+            case_btn.Show({m_x, m_y})
             love.graphics.setColor(1,1,1,1)
             love.graphics.setCanvas()
         end
@@ -58,11 +53,11 @@ local menu = {}
             elseif menu.start == 2 then
                 Case_game.mousepressed(x, y, button)
             else
-                if x>card_btn[1] and x<card_btn[1]+card_btn[3] and y>card_btn[2] and y<card_btn[2]+card_btn[4] then
+                if card_btn.onClick(x, y) then
                     menu.start = 1
                     menu.load()
                 end
-                if x>case_btn[1] and x<case_btn[1]+case_btn[3] and y>case_btn[2] and y<case_btn[2]+case_btn[4] then
+                if case_btn.onClick(x, y) then
                     menu.start = 2
                     menu.load()
                 end
