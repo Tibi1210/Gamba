@@ -1,7 +1,7 @@
 
 local menu = {}
 
-    menu.start = 2
+    menu.start = 0
     menu.canvas = nil
     local card_btn = {1200/2-75, 675/2-37.5, 150, 75}
     local case_btn = {1200/2-75, 675/2-37.5+100, 150, 75}

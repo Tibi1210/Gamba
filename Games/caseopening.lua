@@ -7,47 +7,40 @@ local Case_handler = {}
     local display_pos
     
     local prev_time = 0
-    local stop = true
+    local stop = 0
     local num = 0
     local slow = 0.1
 
-    local szalag = {}
+    local item_line = {}
 
     function Case_handler.load()
 
         case = Case.New(18)
         item = Case.Open(case)
-
-        for _ = 1, 6 do
-            table.insert(szalag, Case.Open(case))
+        
+        for _ = 1, 5 do
+            table.insert(item_line, Case.Open(case))
         end
 
 
     end
 
     function Case_handler.update(time)
-
-        -- if time-prev_time>0.1 and stop then
-        --     prev_time = time
-        --     item = Case.Open(case)
-        --     --print(item[1])
-        --     num = num+1
-        --     if item[1]==18 then
-        --         stop = false
-        --         print(num)
-        --     end
-        -- end
         
-        if time-prev_time>slow and stop then
+        if time-prev_time>slow and stop < 10 then
             prev_time = time
+            stop = stop + 1
 
-            slow = slow + math.floor(time)*0.1
+            slow = slow + 0.01
+            if stop == 8 then
+                table.insert(item_line, 1, item)
+            else
+                table.insert(item_line, 1, Case.Open(case))
+            end
 
-            table.remove(szalag, 6)
-            table.insert(szalag, 1, Case.Open(case))
+            table.remove(item_line, 6)
 
         end
-
 
         love.graphics.setCanvas(Case_handler.canvas)
 
@@ -55,15 +48,12 @@ local Case_handler = {}
 
         love.graphics.setColor(1,1,1,1)
         love.graphics.rectangle("fill", SW/2-450, 100, 900, 300)
-        love.graphics.setColor(1,0,0,1)
-        love.graphics.rectangle("fill", SW/2-2.5, 80, 5, 340)
-        love.graphics.setColor(1,1,1,1)
 
         Shader.New("Shaders/Item.glsl")
         display_pos = {100, 150}
         love.graphics.setShader(Shader.Get())
         Shader.SetVector2("_Size", {200, 200})
-        for index, value in ipairs(szalag) do
+        for index, value in ipairs(item_line) do
             if value[1] < 8 then
                 Shader.SetVector4("_Rarity", {78/255, 111/255, 255/255, 1})
             elseif value[1] < 13 then
@@ -84,24 +74,9 @@ local Case_handler = {}
         end
         love.graphics.setShader()
 
-        
-        love.graphics.setShader(Shader.Get())
-        Shader.SetVector2("_Size", {150, 150})
-        if item[1] < 8 then
-            Shader.SetVector4("_Rarity", {78/255, 111/255, 255/255, 1})
-        elseif item[1] < 13 then
-            Shader.SetVector4("_Rarity", {138/255, 72/255, 254/255, 1})
-        elseif item[1] < 16 then
-            Shader.SetVector4("_Rarity", {149/255, 37/255, 168/255, 1})
-        elseif item[1] < 18 then
-            Shader.SetVector4("_Rarity", {217/255, 69/255, 73/255, 1})
-        else
-            Shader.SetVector4("_Rarity", {252/255, 179/255, 57/255, 1})
-        end
-        Shader.SetTexture2D("_Item", item[2], "clampzero", "nearest")
-        Shader.SetVector2("_ItemPos", {0, 0})
-        love.graphics.rectangle("fill", 0, 0, 150, 150)
-        love.graphics.setShader()
+        love.graphics.setColor(1,0,0,1)
+        love.graphics.rectangle("fill", SW/2-2.5, 80, 5, 340)
+        love.graphics.setColor(1,1,1,1)
 
         display_pos = {50, 450}
         love.graphics.setShader(Shader.Get())
@@ -129,7 +104,6 @@ local Case_handler = {}
             end
         end
         love.graphics.setShader()
-    
 
         love.graphics.setCanvas()
 
@@ -144,7 +118,6 @@ local Case_handler = {}
     end
 
     function Case_handler.mousepressed(x, y, button)
-
     end
 
     function Case_handler.mousereleased(x, y, button)

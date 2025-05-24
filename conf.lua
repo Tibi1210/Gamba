@@ -1,7 +1,7 @@
 _G.love = require("love")
 Shader = require("shader_handler")
-Deck = require("Deck")
-Case = require("Case")
+Deck = require("Entities.Deck")
+Case = require("Entities.Case")
 Support_functions = require("background")
 
 Card_game = require("Games.cards")
